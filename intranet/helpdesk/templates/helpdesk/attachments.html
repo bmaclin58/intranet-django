@@ -1,0 +1,1 @@
+{% if attachments %}<ul class="attachment-list">{% for attachment in attachments %}<li><a href="{% url 'helpdesk:attachment' attachment.pk %}">{{ attachment.original_name }}</a><span class="muted">{{ attachment.size|filesizeformat }}</span></li>{% endfor %}</ul>{% endif %}

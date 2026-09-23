@@ -1,0 +1,6 @@
+/.venv/
+__pycache__/
+*.py[cod]
+intranet/db.sqlite3
+intranet/private_uploads/
+.superpowers/

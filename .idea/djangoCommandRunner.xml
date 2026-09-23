@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DjangoCommandHistory">
+    <option name="commandArguments">
+      <map>
+        <entry key="createsuperuser" value="" />
+        <entry key="startapp" value="helpdesk" />
+        <entry key="startproject" value="" />
+      </map>
+    </option>
+    <option name="recentCommands">
+      <list>
+        <option value="createsuperuser" />
+        <option value="startapp helpdesk" />
+        <option value="startproject" />
+      </list>
+    </option>
+  </component>
+</project>
