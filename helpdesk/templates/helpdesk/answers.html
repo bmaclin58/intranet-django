@@ -1,0 +1,8 @@
+<dl class="answer-list">{% for answer in answers %}
+    <div>
+        <dt>{{ answer.label }}</dt>
+        <dd>{% if answer.type == 'checkbox' %}
+            {{ answer.value|yesno:'Yes,No' }}{% elif answer.type == 'multiple_choice' %}
+            {{ answer.value|join:', '|default:'—' }}{% else %}
+            {{ answer.value|default_if_none:'—'|linebreaksbr }}{% endif %}</dd>
+    </div>{% empty %}<p class="muted">No additional fields.</p>{% endfor %}</dl>

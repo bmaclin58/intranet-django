@@ -1,0 +1,48 @@
+{% extends 'helpdesk/base.html' %}
+{% block title %}My tickets{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div><h1>My tickets</h1>
+            <p class="lead">Your requests, progress, and conversations with IT.</p></div>
+        <a class="button" href="{% url 'helpdesk:choose' %}">New ticket</a></div>
+    <form method="get" class="filter-bar">
+        <div><label for="ticket-search">Search tickets</label><input id="ticket-search" name="q" value="{{ query }}"
+                                                                     placeholder="Subject or description"></div>
+        <div><label for="ticket-status">Status</label><select id="ticket-status" name="status">
+            <option value="">All statuses</option>{% for value,label in statuses %}
+            <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select></div>
+        <button class="button secondary">Apply filters</button>
+        <a href="{% url 'helpdesk:index' %}">Reset</a></form>
+    <div class="table-scroll">
+        <table>
+            <thead>
+            <tr>
+                <th>Ticket</th>
+                <th>Subject</th>
+                <th>Request type</th>
+                <th>Status</th>
+                <th>Updated</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in page %}
+                <tr>
+                    <td><a href="{% url 'helpdesk:detail' ticket.pk %}">{{ ticket.number }}</a></td>
+                    <td><a class="subject-link" href="{% url 'helpdesk:detail' ticket.pk %}">{{ ticket.subject }}</a>
+                    </td>
+                    <td>{{ ticket.type_label }}</td>
+                    <td><span class="status status-{{ ticket.status }}">{{ ticket.get_status_display }}</span></td>
+                    <td>{{ ticket.updated_at|date:'M j, Y, g:i a' }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="empty-state">No tickets to show.<br><a href="{% url 'helpdesk:choose' %}">Create
+                        a new ticket</a> when you need help from IT.
+                    </td>
+                </tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'helpdesk/pagination.html' %}
+{% endblock %}

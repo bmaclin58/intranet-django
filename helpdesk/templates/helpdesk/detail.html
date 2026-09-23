@@ -1,0 +1,46 @@
+{% extends 'helpdesk/base.html' %}
+{% block title %}{{ ticket.number }}{% endblock %}
+{% block content %}
+    <p><a href="{% url 'helpdesk:index' %}">Back to my tickets</a></p>
+    <div class="page-heading">
+        <div><p class="ticket-number">{{ ticket.number }}</p>
+            <h1>{{ ticket.subject }}</h1></div>
+        <span class="status status-{{ ticket.status }}">{{ ticket.get_status_display }}</span></div>
+    <div class="ticket-layout">
+        <section>
+            <h2>Request details</h2>
+            <div class="prose">{{ ticket.description|linebreaksbr }}</div>
+            {% include 'helpdesk/answers.html' with answers=ticket.answers %}
+            {% include 'helpdesk/attachments.html' %}
+            <section class="conversation"><h2>Conversation</h2>
+                {% for comment in comments %}
+                    <article class="comment">
+                        <header><strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong>
+                            <time datetime="{{ comment.created_at|date:'c' }}">{{ comment.created_at|date:'M j, Y, g:i a' }}</time>
+                        </header>
+                        <div class="prose">{{ comment.body|linebreaksbr }}</div>
+                        {% include 'helpdesk/attachments.html' with attachments=comment.attachments.all %}
+                    </article>{% empty %}<p class="muted">Replies from IT will appear here.</p>{% endfor %}
+                {% if form %}{{ form }}{% endif %}</section>
+        </section>
+        <aside class="ticket-meta"><h2>Ticket information</h2>
+            <dl>
+                <dt>Category</dt>
+                <dd>{{ ticket.category_label }}</dd>
+                <dt>Ticket type</dt>
+                <dd>{{ ticket.type_label }}</dd>
+                <dt>Priority</dt>
+                <dd>{{ ticket.get_priority_display }}</dd>
+                <dt>Assigned to</dt>
+                <dd>{% if ticket.assignee %}
+                    {{ ticket.assignee.get_full_name|default:ticket.assignee.username }}{% else %}Not yet
+                    assigned{% endif %}</dd>
+                <dt>Created</dt>
+                <dd>{{ ticket.created_at|date:'M j, Y, g:i a' }}</dd>
+                <dt>Last updated</dt>
+                <dd>{{ ticket.updated_at|date:'M j, Y, g:i a' }}</dd>
+            </dl>{% if user.is_staff and perms.helpdesk.change_ticket %}
+                <a href="{% url 'admin:helpdesk_ticket_change' ticket.pk %}">Manage in administration</a>{% endif %}
+        </aside>
+    </div>
+{% endblock %}

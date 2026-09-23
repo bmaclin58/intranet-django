@@ -1,0 +1,29 @@
+{% extends 'helpdesk/base.html' %}
+{% block title %}Choose a request{% endblock %}
+{% block content %}
+    <h1>New ticket</h1><p class="lead">Choose the request that best describes what you need.</p>
+    <ol class="steps" aria-label="Ticket submission steps">
+        <li class="current" aria-current="step"><span>1</span>Choose a request</li>
+        <li><span>2</span>Ticket details</li>
+    </ol>
+    <div class="request-catalog">
+        {% for category in categories %}{% if category.ticket_types.all %}
+            <section class="category-section">
+                <div><h2>{{ category.name }}</h2>
+                    <p class="muted">{{ category.description }}</p></div>
+                <div>
+                    {% for kind in category.ticket_types.all %}
+                        <a class="request-option" href="{% url 'helpdesk:create' kind.pk %}">
+                            <div><h3>{{ kind.name }}</h3>
+                                <p>{{ kind.description }}</p></div>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="1.5" aria-hidden="true">
+                                <path d="M5 12h14m-6-6 6 6-6 6"/>
+                            </svg>
+                        </a>{% endfor %}
+                </div>
+            </section>{% endif %}{% empty %}
+            <p class="empty-state">No request forms are available yet. Please contact your IT
+                administrator.</p>{% endfor %}
+    </div>
+{% endblock %}

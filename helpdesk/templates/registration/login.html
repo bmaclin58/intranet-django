@@ -1,0 +1,17 @@
+{% extends 'helpdesk/base.html' %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+    <section class="login-panel"><h1>Sign in</h1>
+        <p class="lead">Access your SCI IT helpdesk account.</p>
+        <form method="post" class="login-form">{% csrf_token %}
+            {% if form.errors %}
+                <div class="form-errors" role="alert">Your username and password did not match. Please try again.
+                </div>{% endif %}
+            {% for field in form %}
+                <div class="hd_field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}
+                </div>{% endfor %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <button type="submit" class="button">Sign in</button>
+        </form>
+        <p class="muted">Need an account or a password reset? Contact your IT administrator.</p></section>
+{% endblock %}
