@@ -1,10 +1,13 @@
 {{ form.iommi_open_tag }}
 {% csrf_token %}
-{% if form.errors %}<div class="form-errors" role="alert">{{ form.errors }}</div>{% endif %}
+{% if form.errors %}
+    <div class="form-errors" role="alert">{{ form.errors }}</div>{% endif %}
 <div class="field-grid">
-{% for field in form.fields.values %}
-  {% if field.input.attrs.type == 'hidden' %}{{ field.input }}{% else %}{{ field }}{% endif %}
-{% endfor %}
+    {% for field in form.fields.values %}
+        {% if field.input.attrs.type == 'hidden' %}{{ field.input }}{% else %}{{ field }}{% endif %}
+    {% endfor %}
 </div>
-<div class="form-actions">{{ form.render_actions }}{% if form.extra.cancel_url %}<a href="{{ form.extra.cancel_url }}">Cancel</a>{% endif %}</div>
+<div class="form-actions">
+    {{ form.render_actions }}{% if form.extra.cancel_url %}<a href="{{ form.extra.cancel_url }}">Cancel</a>{% endif %}
+</div>
 {{ form.iommi_close_tag }}

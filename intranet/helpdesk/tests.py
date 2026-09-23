@@ -1,9 +1,11 @@
 import tempfile
 from datetime import datetime
+from importlib import import_module
 from pathlib import Path
 from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
+from django.apps import apps
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
@@ -53,6 +55,56 @@ class HelpdeskTests(TestCase):
     def ticket(self):
         return Ticket.objects.create(category=self.category, ticket_type=self.kind, requester=self.employee,
                                      subject='Existing issue', description='Details')
+
+    def test_package_exports_preserve_models_forms_and_migration_callbacks(self):
+        from . import forms, models
+
+        self.assertTrue(hasattr(models, '__path__'), 'Models should be a package with stable exports.')
+        self.assertTrue(hasattr(forms, '__path__'), 'Forms should be a package with stable exports.')
+        exports = {
+            'models.definitions': ('Category', 'TicketType', 'TicketField'),
+            'models.tickets': ('Ticket',),
+            'models.activity': ('TicketComment', 'TicketAttachment', 'private_storage', 'attachment_path'),
+            'forms.shared': ('FORM_STYLE', 'bounded_text', 'attachment_field', 'validate_files'),
+            'forms.tickets': ('FIELD_FACTORIES', 'definition_data', 'definition_token', 'custom_valid',
+                              'ticket_form', 'snapshot_answers'),
+            'forms.replies': ('reply_form',),
+            'forms.reports': ('ReportFilters',),
+        }
+        for module_name, names in exports.items():
+            module = import_module(f'helpdesk.{module_name}')
+            package = models if module_name.startswith('models.') else forms
+            for name in names:
+                with self.subTest(export=name):
+                    self.assertIs(getattr(package, name), getattr(module, name))
+        for model in (Category, TicketType, TicketField, Ticket, TicketComment, TicketAttachment):
+            self.assertIs(apps.get_model('helpdesk', model.__name__), model)
+        migration = import_module('helpdesk.migrations.0001_initial').Migration
+        operation = next(op for op in migration.operations if getattr(op, 'name', None) == 'TicketAttachment')
+        historical_file = dict(operation.fields)['file']
+        current_file = TicketAttachment._meta.get_field('file')
+        for field in (historical_file, current_file):
+            self.assertIs(field.upload_to, models.attachment_path)
+            self.assertIs(field._storage_callable, models.private_storage)
+        self.assertEqual(Path(models.private_storage().location), Path(self.media.name))
+
+    def test_admin_pages_preserve_access_protection_and_get_only(self):
+        urls = (reverse('admin:helpdesk_tickettype_preview', args=[self.kind.pk]),
+                reverse('admin:helpdesk_ticket_reports'))
+        for user, status in ((None, 302), (self.employee, 302), (self.staff, 403), (self.admin, 200)):
+            self.client.logout()
+            if user is not None:
+                self.client.force_login(user)
+            for url in urls:
+                with self.subTest(user=user, url=url):
+                    response = self.client.get(url)
+                    self.assertEqual(response.status_code, status)
+                    if status == 302:
+                        self.assertTrue(response.url.startswith(reverse('admin:login')))
+        for url in urls:
+            with self.subTest(post=url):
+                self.assertEqual(self.client.post(url, self.payload()).status_code, 405)
+        self.assertFalse(Ticket.objects.exists())
 
     def test_submit_invalid_and_valid_server_owned_values(self):
         self.assertEqual(self.submit(subject='').status_code, 200)

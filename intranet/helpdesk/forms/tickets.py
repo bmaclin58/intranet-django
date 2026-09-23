@@ -1,49 +1,42 @@
+"""Build dynamic ticket forms, detect changed definitions, and snapshot answers."""
 import hashlib
 import json
 from decimal import Decimal
 
-from django import forms as django_forms
-from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
-from django.conf import settings
 from django.urls import reverse
-from iommi import Field, Form, Style
-from iommi.style_base import base
+from iommi import Field, Form
 
-from .models import Category, Ticket
-from .uploads import validate_uploads
+from ..models import Ticket
+from .shared import FORM_STYLE, attachment_field, bounded_text, validate_files
 
-
-FORM_STYLE = Style(
-    base,
-    Field=dict(template='helpdesk/field.html', attrs__class__hd_field=True,
-               input__attrs__required=lambda field, **_: 'required' if field.required and not field.is_list else None,
-               input__attrs__aria_required=lambda field, **_: 'true' if field.required else None),
-    Form=dict(template='helpdesk/iommi_form.html'),
-    Action=dict(attrs__class__button=True),
-)
 
 # The only permitted input factories. Admin data never names Python code or templates.
 FIELD_FACTORIES = {
-    'text': Field.text, 'textarea': Field.textarea, 'email': Field.email,
-    'integer': Field.integer, 'decimal': Field.decimal, 'date': Field.date,
-    'checkbox': Field.boolean, 'dropdown': Field.choice, 'multiple_choice': Field.checkboxes,
+    'text': Field.text,
+    'textarea': Field.textarea,
+    'email': Field.email,
+    'integer': Field.integer,
+    'decimal': Field.decimal,
+    'date': Field.date,
+    'checkbox': Field.boolean,
+    'dropdown': Field.choice,
+    'multiple_choice': Field.checkboxes,
 }
 
 
 def definition_data(ticket_type):
-    return {'type': ticket_type.pk, 'name': ticket_type.name, 'active': ticket_type.active,
-            'category': ticket_type.category_id, 'category_active': ticket_type.category.active,
+    return {'type': ticket_type.pk,
+            'name': ticket_type.name,
+            'active': ticket_type.active,
+            'category': ticket_type.category_id,
+            'category_active': ticket_type.category.active,
             'fields': list(ticket_type.fields.filter(active=True).values(
                 'id', 'label', 'field_type', 'required', 'help_text', 'choices', 'position'))}
 
 
 def definition_token(ticket_type):
     return hashlib.sha256(json.dumps(definition_data(ticket_type), sort_keys=True).encode()).hexdigest()
-
-
-def bounded_text(parsed_data, **_):
-    return (parsed_data is None or len(parsed_data) <= 10000, 'Use no more than 10,000 characters.')
 
 
 def custom_valid(field, parsed_data, **_):
@@ -55,23 +48,6 @@ def custom_valid(field, parsed_data, **_):
     if isinstance(parsed_data, str) and len(parsed_data) > field.extra.get('max_length', 10000):
         return False, 'This answer is too long.'
     return True, ''
-
-
-def attachment_field():
-    return Field.file(
-        required=False, is_list=True, display_name='Attachments', template='helpdesk/field.html',
-        attrs__class__wide=True, input__attrs__accept='.png,.jpg,.jpeg,.pdf,.txt,.docx,.xlsx',
-        help_text=f'Screenshots or documents. Up to {settings.HELPDESK_MAX_FILES} files, {settings.HELPDESK_MAX_FILE_SIZE // (1024 * 1024)} MB each.',
-    )
-
-
-def validate_files(form, **_):
-    if form.is_valid():
-        try:
-            validate_uploads(form.fields.attachments.value or [])
-        except ValidationError as exc:
-            for error in exc.messages:
-                form.fields.attachments.add_error(error)
 
 
 def ticket_form(ticket_type, handler=None, preview=False):
@@ -125,31 +101,3 @@ def snapshot_answers(form, definitions):
                 'help_text': definition.help_text, 'position': definition.position, 'active': definition.active,
                 'value': form.fields[f'custom_{definition.pk}'].value} for definition in definitions]
     return json.loads(json.dumps(answers, cls=DjangoJSONEncoder))
-
-
-def reply_form(handler):
-    def validate(form, **_):
-        validate_files(form)
-        if form.is_valid() and not form.fields.body.value and not form.fields.attachments.value:
-            form.add_error('Enter a reply or attach a file.')
-    return Form(
-        iommi_style=FORM_STYLE, attrs__class__helpdesk_form=True, attrs__enctype='multipart/form-data',
-        fields=dict(body=Field.textarea(display_name='Your reply', required=False, attrs__class__wide=True,
-                                        input__attrs__rows=4, input__attrs__maxlength=10000, is_valid=bounded_text),
-                    attachments=attachment_field()),
-        post_validation=validate, actions__submit__display_name='Send reply', actions__submit__post_handler=handler,
-    )
-
-
-class ReportFilters(django_forms.Form):
-    created_from = django_forms.DateField(required=False, widget=django_forms.DateInput(attrs={'type': 'date'}))
-    created_to = django_forms.DateField(required=False, widget=django_forms.DateInput(attrs={'type': 'date'}))
-    category = django_forms.ModelChoiceField(queryset=Category.objects.all(), required=False, empty_label='All categories')
-    status = django_forms.ChoiceField(choices=[('', 'All statuses'), *Ticket.Status.choices], required=False)
-
-    def clean(self):
-        cleaned = super().clean()
-        start, end = cleaned.get('created_from'), cleaned.get('created_to')
-        if start and end and start > end:
-            raise ValidationError('Created from must be on or before Created to.')
-        return cleaned

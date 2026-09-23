@@ -2,27 +2,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}IT Helpdesk{% endblock %} · Standard Calibrations</title>
-  <link rel="icon" href="{% static 'helpdesk/sci-logo.svg' %}">
-  <link rel="stylesheet" href="{% static 'helpdesk/helpdesk.css' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}IT Helpdesk{% endblock %} · Standard Calibrations</title>
+    <link rel="icon" href="{% static 'helpdesk/sci-logo.svg' %}">
+    <link rel="stylesheet" href="{% static 'helpdesk/helpdesk.css' %}">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
-  <a class="brand" href="{% url 'helpdesk:index' %}"><img src="{% static 'helpdesk/sci-logo.svg' %}" alt="SCI" width="92" height="48"><span>IT Helpdesk</span></a>
-  {% if user.is_authenticated %}
-  <nav aria-label="Main navigation">
-    <a href="{% url 'helpdesk:index' %}" {% if nav == 'tickets' %}aria-current="page"{% endif %}>My tickets</a>
-    <a href="{% url 'helpdesk:choose' %}" {% if nav == 'new' %}aria-current="page"{% endif %}>New ticket</a>
-    {% if user.is_staff %}{% if perms.helpdesk.view_ticket or perms.helpdesk.view_tickettype or perms.helpdesk.view_category %}<a href="{% url 'admin:index' %}">Administration</a>{% endif %}{% endif %}
-  </nav>
-  <form method="post" action="{% url 'logout' %}" class="logout">{% csrf_token %}<button class="text-button" type="submit">Sign out</button></form>
-  {% endif %}
+    <a class="brand" href="{% url 'helpdesk:index' %}"><img src="{% static 'helpdesk/sci-logo.svg' %}" alt="SCI"
+                                                            width="92" height="48"><span>IT Helpdesk</span></a>
+    {% if user.is_authenticated %}
+        <nav aria-label="Main navigation">
+            <a href="{% url 'helpdesk:index' %}" {% if nav == 'tickets' %}aria-current="page"{% endif %}>My tickets</a>
+            <a href="{% url 'helpdesk:choose' %}" {% if nav == 'new' %}aria-current="page"{% endif %}>New ticket</a>
+            {% if user.is_staff %}
+                {% if perms.helpdesk.view_ticket or perms.helpdesk.view_tickettype or perms.helpdesk.view_category %}
+                    <a href="{% url 'admin:index' %}">Administration</a>{% endif %}{% endif %}
+        </nav>
+        <form method="post" action="{% url 'logout' %}" class="logout">{% csrf_token %}
+            <button class="text-button" type="submit">Sign out</button>
+        </form>
+    {% endif %}
 </header>
 <main id="main" class="main-container">
-  {% for message in messages %}<div class="notice" role="status">{{ message }}</div>{% endfor %}
-  {% block content %}{% endblock %}
+    {% for message in messages %}
+        <div class="notice" role="status">{{ message }}</div>{% endfor %}
+    {% block content %}{% endblock %}
 </main>
 <footer class="site-footer"><span>Standard Calibrations, Inc.</span><span>IT Helpdesk</span></footer>
 </body>

@@ -1,15 +1,104 @@
 {% extends 'admin/base_site.html' %}
 {% load static %}
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'helpdesk/admin.css' %}">{% endblock %}
-{% block breadcrumbs %}<div class="report-breadcrumb"><a href="{% url 'admin:index' %}">Home</a> / Helpdesk / Reports</div>{% endblock %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" href="{% static 'helpdesk/admin.css' %}">{% endblock %}
+{% block breadcrumbs %}
+    <div class="report-breadcrumb"><a href="{% url 'admin:index' %}">Home</a> / Helpdesk / Reports</div>{% endblock %}
 {% block content %}
-<div class="hd-report">
-<h1>Ticket reports</h1><p class="report-lead">A starting point for understanding IT workload.</p>
-<form method="get" class="report-filters">{% for field in filters %}<div><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}</div>{% endfor %}<button type="submit">Apply filters</button><a href="{{ report_url }}">Reset</a>{{ filters.non_field_errors }}</form>
-<dl class="report-totals"><div><dt>Total tickets</dt><dd>{{ totals.total }}</dd></div><div><dt>Open tickets</dt><dd>{{ totals.open }}</dd></div><div><dt>Unassigned open</dt><dd>{{ totals.unassigned }}</dd></div><div><dt>Resolved or closed</dt><dd>{{ totals.finished }}</dd></div></dl>
-<p class="report-caption">Counts reflect the selected filters.</p>
-<div class="report-breakdowns"><section><h2>By category</h2><table><thead><tr><th>Category</th><th>Tickets</th></tr></thead><tbody>{% for row in by_category %}<tr><td>{{ row.category__name }}</td><td>{{ row.count }}</td></tr>{% empty %}<tr><td colspan="2" class="report-empty">No tickets in this period.</td></tr>{% endfor %}</tbody></table></section><section><h2>By status</h2><table><thead><tr><th>Status</th><th>Tickets</th></tr></thead><tbody>{% for row in by_status %}<tr><td>{{ row.label }}</td><td>{{ row.count }}</td></tr>{% empty %}<tr><td colspan="2" class="report-empty">No tickets in this period.</td></tr>{% endfor %}</tbody></table></section></div>
-<section><h2>Matching tickets</h2><div class="report-scroll"><table><thead><tr><th>Ticket</th><th>Subject</th><th>Category</th><th>Status</th><th>Assignee</th><th>Created</th></tr></thead><tbody>{% for ticket in page %}<tr><td><a href="{% url 'admin:helpdesk_ticket_change' ticket.pk %}">{{ ticket.number }}</a></td><td>{{ ticket.subject }}</td><td>{{ ticket.category.name }}</td><td>{{ ticket.get_status_display }}</td><td>{{ ticket.assignee|default:'Unassigned' }}</td><td>{{ ticket.created_at|date:'M j, Y' }}</td></tr>{% empty %}<tr><td colspan="6" class="report-empty">No tickets match these filters.</td></tr>{% endfor %}</tbody></table></div>{% include 'helpdesk/pagination.html' %}</section>
-<footer class="report-footer">Standard Calibrations, Inc.</footer>
-</div>
+    <div class="hd-report">
+        <h1>Ticket reports</h1>
+        <p class="report-lead">A starting point for understanding IT workload.</p>
+        <form method="get" class="report-filters">{% for field in filters %}
+            <div><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}
+            </div>{% endfor %}
+            <button type="submit">Apply filters</button>
+            <a href="{{ report_url }}">Reset</a>{{ filters.non_field_errors }}</form>
+        <dl class="report-totals">
+            <div>
+                <dt>Total tickets</dt>
+                <dd>{{ totals.total }}</dd>
+            </div>
+            <div>
+                <dt>Open tickets</dt>
+                <dd>{{ totals.open }}</dd>
+            </div>
+            <div>
+                <dt>Unassigned open</dt>
+                <dd>{{ totals.unassigned }}</dd>
+            </div>
+            <div>
+                <dt>Resolved or closed</dt>
+                <dd>{{ totals.finished }}</dd>
+            </div>
+        </dl>
+        <p class="report-caption">Counts reflect the selected filters.</p>
+        <div class="report-breakdowns">
+            <section><h2>By category</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Tickets</th>
+                    </tr>
+                    </thead>
+                    <tbody>{% for row in by_category %}
+                        <tr>
+                            <td>{{ row.category__name }}</td>
+                            <td>{{ row.count }}</td>
+                        </tr>{% empty %}
+                        <tr>
+                            <td colspan="2" class="report-empty">No tickets in this period.</td>
+                        </tr>{% endfor %}</tbody>
+                </table>
+            </section>
+            <section><h2>By status</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Tickets</th>
+                    </tr>
+                    </thead>
+                    <tbody>{% for row in by_status %}
+                        <tr>
+                            <td>{{ row.label }}</td>
+                            <td>{{ row.count }}</td>
+                        </tr>{% empty %}
+                        <tr>
+                            <td colspan="2" class="report-empty">No tickets in this period.</td>
+                        </tr>{% endfor %}</tbody>
+                </table>
+            </section>
+        </div>
+        <section><h2>Matching tickets</h2>
+            <div class="report-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Subject</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Assignee</th>
+                        <th>Created</th>
+                    </tr>
+                    </thead>
+                    <tbody>{% for ticket in page %}
+                        <tr>
+                            <td><a href="{% url 'admin:helpdesk_ticket_change' ticket.pk %}">{{ ticket.number }}</a>
+                            </td>
+                            <td>{{ ticket.subject }}</td>
+                            <td>{{ ticket.category.name }}</td>
+                            <td>{{ ticket.get_status_display }}</td>
+                            <td>{{ ticket.assignee|default:'Unassigned' }}</td>
+                            <td>{{ ticket.created_at|date:'M j, Y' }}</td>
+                        </tr>{% empty %}
+                        <tr>
+                            <td colspan="6" class="report-empty">No tickets match these filters.</td>
+                        </tr>{% endfor %}</tbody>
+                </table>
+            </div>
+            {% include 'helpdesk/pagination.html' %}</section>
+        <footer class="report-footer">Standard Calibrations, Inc.</footer>
+    </div>
 {% endblock %}

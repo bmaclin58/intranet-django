@@ -14,6 +14,10 @@ def visible_tickets(user):
 
 
 def eligible_assignees():
-    permission = Q(user_permissions__content_type__app_label='helpdesk', user_permissions__codename='change_ticket')
-    group_permission = Q(groups__permissions__content_type__app_label='helpdesk', groups__permissions__codename='change_ticket')
+    permission = Q(user_permissions__content_type__app_label='helpdesk',
+                   user_permissions__codename='change_ticket')
+
+    group_permission = Q(groups__permissions__content_type__app_label='helpdesk',
+                         groups__permissions__codename='change_ticket')
+
     return get_user_model().objects.filter(is_active=True, is_staff=True).filter(Q(is_superuser=True) | permission | group_permission).distinct()

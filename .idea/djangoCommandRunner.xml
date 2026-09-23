@@ -4,12 +4,14 @@
     <option name="commandArguments">
       <map>
         <entry key="createsuperuser" value="" />
+        <entry key="runserver" value="0.0.0.0:8000" />
         <entry key="startapp" value="helpdesk" />
         <entry key="startproject" value="" />
       </map>
     </option>
     <option name="recentCommands">
       <list>
+        <option value="runserver 0.0.0.0:8000" />
         <option value="createsuperuser" />
         <option value="startapp helpdesk" />
         <option value="startproject" />

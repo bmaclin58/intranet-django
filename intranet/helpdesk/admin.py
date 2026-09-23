@@ -11,7 +11,7 @@ from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationFo
 
 from .models import Category, Ticket, TicketAttachment, TicketComment, TicketField, TicketType
 from .permissions import eligible_assignees
-from . import views
+from . import admin_views
 
 
 @admin.register(Category)
@@ -45,7 +45,7 @@ class TicketTypeAdmin(ModelAdmin):
 
     def get_urls(self):
         return [path('<int:type_id>/preview/', self.admin_site.admin_view(
-            lambda request, type_id: views.preview(request, type_id, self)),
+            lambda request, type_id: admin_views.preview(request, type_id, self)),
             name='helpdesk_tickettype_preview')] + super().get_urls()
 
 
@@ -131,7 +131,7 @@ class TicketAdmin(ModelAdmin):
         formset.save_m2m()
 
     def get_urls(self):
-        return [path('reports/', self.admin_site.admin_view(lambda request: views.reports(request, self)),
+        return [path('reports/', self.admin_site.admin_view(lambda request: admin_views.reports(request, self)),
                      name='helpdesk_ticket_reports')] + super().get_urls()
 
 
