@@ -7,7 +7,7 @@ PORT = 8000
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TicketSystem.settings')
     from django.core.management import execute_from_command_line
     execute_from_command_line(['manage.py', 'runserver', f'{HOST}:{PORT}'])
 

@@ -5,7 +5,7 @@ from zipfile import BadZipFile, ZipFile
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
-from .models import TicketAttachment
+from helpdesk.models import TicketAttachment
 
 logger = logging.getLogger(__name__)
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.pdf', '.txt', '.docx', '.xlsx'}
@@ -50,8 +50,11 @@ def validate_uploads(files):
 
 def save_attachments(ticket, user, files, written, comment=None):
     for upload in files:
-        attachment = TicketAttachment(ticket=ticket, comment=comment, uploader=user,
-                                      original_name=Path(upload.name.replace('\\', '/')).name, size=upload.size)
+        attachment = TicketAttachment(ticket=ticket,
+                                      comment=comment,
+                                      uploader=user,
+                                      original_name=Path(upload.name.replace('\\', '/')).name,
+                                      size=upload.size)
         field = attachment._meta.get_field('file')
         name = field.generate_filename(attachment, upload.name)
         # Register the UUID destination before writing so interrupted writes are removed too.

@@ -59,6 +59,7 @@ class Ticket(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     resolved_at = models.DateTimeField(null=True, blank=True, editable=False)
     closed_at = models.DateTimeField(null=True, blank=True, editable=False)
+    requester_email = models.EmailField(max_length=254, null=True, blank=True, editable=False)
 
     class Meta:
         ordering = ['-created_at', '-pk']

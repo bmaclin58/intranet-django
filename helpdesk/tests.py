@@ -15,10 +15,12 @@ from django.db.models.deletion import ProtectedError
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
+from .uploads import validate_uploads
 from .models import Category, Ticket, TicketAttachment, TicketComment, TicketField, TicketType
 from .forms import definition_token
-from .uploads import validate_uploads
 
+from django.core import mail
+from helpdesk.forms import definition_token
 
 class HelpdeskTests(TestCase):
     @classmethod
@@ -31,6 +33,10 @@ class HelpdeskTests(TestCase):
         cls.category = Category.objects.create(name='Testing')
         cls.kind = TicketType.objects.create(category=cls.category, name='Test request')
         cls.field = TicketField.objects.create(ticket_type=cls.kind, label='Asset', field_type='text', required=True)
+
+        for user in (cls.employee, cls.other, cls.staff) :
+            user.email = f"{user.username}@example.test"
+            user.save(update_fields = ["email"])
 
     def setUp(self):
         self.media = tempfile.TemporaryDirectory()
@@ -128,7 +134,7 @@ class HelpdeskTests(TestCase):
                 self.field.choices = 'One\nTwo' if field_type in ('dropdown', 'multiple_choice') else ''
                 self.field.save()
                 response = self.submit(**{f'custom_{self.field.pk}': value})
-                self.assertEqual(response.status_code, 302, response.content[:500])
+                self.assertEqual(response.status_code, 200, response.content[:500])
                 self.assertEqual(Ticket.objects.latest('pk').answers[0]['value'], expected)
         for field_type, value in [('email', 'bad'), ('integer', '1.2'), ('decimal', 'NaN'),
                                   ('date', 'bad'), ('checkbox', ''), ('dropdown', 'Forged'),

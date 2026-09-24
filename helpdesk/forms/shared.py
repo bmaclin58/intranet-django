@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from iommi import Field, Style
 from iommi.style_base import base
 
-from ..uploads import validate_uploads
+from helpdesk.uploads import validate_uploads
 
 FORM_STYLE = Style (
 		base,

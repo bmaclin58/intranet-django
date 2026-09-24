@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from django.templatetags.static import static
 from django.urls import reverse_lazy
@@ -153,6 +153,9 @@ DATA_UPLOAD_MAX_NUMBER_FILES = 5
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
+
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "helpdesk@test.com")
+HELPDESK_NOTIFICATIONS_EMAIL = os.environ.get("HELPDESK_NOTIFICATIONS_EMAIL", "it-support@test.com")
 
 MAILERS = {
 		'default' : {

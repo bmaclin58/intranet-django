@@ -3,3 +3,19 @@ id,name,description,position,active,category_id
 2,Software issue,Report a problem with an application.,0,1,2
 3,Access request,Ask IT to review access to a system or application.,0,1,3
 4,Secure Box,Request for access to SCI's Box account (to be used for CUI only),0,1,3
+5,ChatGPT AI,Request to access SCI's ChatGPT Enterprise account,0,1,
+6,Adobe Acrobat Pro,Pro lets you edit PDFs and work on PDFs inside of Box.,0,1,
+7,Sage X3,Requesting access to Sage X3.,0,1,
+8,MOX,Requesting access to MOX.,0,1,
+9,Email Issue,,0,1,
+10,Move Hardware, Request moving IT equipment to a new location. ,0,1,
+11,Request New hardware,Request for additional hardware that require CFO Approval,0,1,
+12,Login,Issues logging into any application or service.,0,1,
+13,VPN,Cisco Secure Client is not connecting to vpn.standardcal.com,0,1,
+14,Internet Connectivity,,0,1,
+15,Report an issue with Service Desk,,0,1,
+16,Installation Request,,0,1,
+17,SCI Fileserver,,0,1,
+18,Paylocity Issues,,0,1,
+19,Screen Lock Exception,,0,1,
+20,Unlisted,,0,1,

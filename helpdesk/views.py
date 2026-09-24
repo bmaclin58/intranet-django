@@ -3,14 +3,17 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator
-from django.db import DatabaseError
+from django.core.validators import validate_email
+from django.db import DatabaseError, transaction
 from django.db.models import Q
 from django.http import FileResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_GET, require_http_methods
 
+from .forms.emails.email_handler import send_ticket_created_emails, urgency_notification
 from .forms import reply_form, snapshot_answers, ticket_form
 from .models import Category, Ticket, TicketAttachment, TicketComment, TicketType
 from .permissions import can_handle_tickets, visible_tickets
@@ -59,34 +62,66 @@ def choose(request) :
 
 
 @login_required
-@require_http_methods(['GET', 'POST'])
+@require_http_methods(["GET", "POST"])
 def create(request, type_id) :
 	kind = get_object_or_404(
-			TicketType.objects.select_related('category'), pk = type_id, active = True, category__active = True,
+			TicketType.objects.select_related("category"),
+			pk = type_id,
+			active = True,
+			category__active = True,
 			)
 
 	def submit(form, **_) :
-
 		if not form.is_valid() :
 			return None
+
+		requester_email = (request.user.email or "").strip()
+		try :
+			validate_email(requester_email)
+		except ValidationError :
+			form.add_error(
+					"Your account needs a valid email address before you can "
+					"submit a ticket. Please ask IT to update your account.",
+					)
+			return None
+
 		ticket = Ticket(
 				category = kind.category,
 				ticket_type = kind,
 				requester = request.user,
+				requester_email = requester_email,
 				subject = form.fields.subject.value,
 				description = form.fields.description.value,
 				priority = form.fields.priority.value,
 				answers = snapshot_answers(form, definitions),
 				)
 		try :
-			save_ticket_activity(ticket, request.user, form.fields.attachments.value or [])
-
+			save_ticket_activity(
+					ticket, request.user, form.fields.attachments.value or [],
+					)
 		except (OSError, DatabaseError) :
-			logger.exception('Ticket submission failed')
-			form.add_error('Your ticket could not be saved. Please try again. Re-select any attachments.')
+			logger.exception("Ticket submission failed")
+			form.add_error(
+					"Your ticket could not be saved. Please try again. "
+					"Re-select any attachments.",
+					)
 			return None
-		messages.success(request, f'{ticket.number} was submitted to IT.')
-		return redirect('helpdesk:detail', pk = ticket.pk)
+
+		ticket_url = request.build_absolute_uri(
+				reverse("helpdesk:detail", kwargs = {"pk" : ticket.pk}),
+				)
+
+		def notify() :
+			# triggers on django.db.transaction
+			send_ticket_created_emails(ticket.pk, ticket_url)
+
+			if ticket.priority in ['High', 'Urgent']:
+				mngment_Email = request.user.manager
+				urgency_notification(ticket.pk, ticket_url, mngment_Email)
+
+		transaction.on_commit(notify, robust = True)
+		messages.success(request, f"{ticket.number} was submitted to IT.")
+		return redirect("helpdesk:detail", pk = ticket.pk)
 
 	unbound, definitions = ticket_form(kind, submit)
 	form = unbound.bind(request = request)
