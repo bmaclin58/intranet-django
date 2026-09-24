@@ -30,98 +30,98 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "unfold",  # before django.contrib.admin
-    "unfold.contrib.filters",  # optional, if special filters are needed
-    "unfold.contrib.forms",  # optional, if special form elements are needed
-    "unfold.contrib.inlines",  # optional, if special inlines are needed
-    "unfold.contrib.import_export",  # optional, if django-import-export package is used
-    "unfold.contrib.guardian",  # optional, if django-guardian package is used
-    "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
-    "unfold.contrib.location_field",  # optional, if django-location-field package is used
-    "unfold.contrib.constance",  # optional, if django-constance package is used
-    "unfold.contrib.hijack",  # optional, if django-hijack package is used
-    "django.contrib.admin",  # required
-    'iommi',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'helpdesk.apps.HelpdeskConfig',
-]
+		"unfold",  # before django.contrib.admin
+		"unfold.contrib.filters",  # optional, if special filters are needed
+		"unfold.contrib.forms",  # optional, if special form elements are needed
+		"unfold.contrib.inlines",  # optional, if special inlines are needed
+		"unfold.contrib.import_export",  # optional, if django-import-export package is used
+		"unfold.contrib.guardian",  # optional, if django-guardian package is used
+		"unfold.contrib.simple_history",  # optional, if django-simple-history package is used
+		"unfold.contrib.location_field",  # optional, if django-location-field package is used
+		"unfold.contrib.constance",  # optional, if django-constance package is used
+		"unfold.contrib.hijack",  # optional, if django-hijack package is used
+		"django.contrib.admin",  # required
+		'iommi',
+		'django.contrib.auth',
+		'django.contrib.contenttypes',
+		'django.contrib.sessions',
+		'django.contrib.messages',
+		'django.contrib.staticfiles',
+		'helpdesk.apps.HelpdeskConfig',
+		]
 
 MIDDLEWARE = [
-    'iommi.live_edit.Middleware',
-    'iommi.sql_trace.Middleware',
-    'iommi.profiling.Middleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'iommi.middleware',
-]
+		'iommi.live_edit.Middleware',
+		'iommi.sql_trace.Middleware',
+		'iommi.profiling.Middleware',
+		'django.middleware.security.SecurityMiddleware',
+		'django.contrib.sessions.middleware.SessionMiddleware',
+		'django.middleware.common.CommonMiddleware',
+		'django.middleware.csrf.CsrfViewMiddleware',
+		'django.contrib.auth.middleware.AuthenticationMiddleware',
+		'django.contrib.messages.middleware.MessageMiddleware',
+		'django.middleware.clickjacking.XFrameOptionsMiddleware',
+		'iommi.middleware',
+		]
 
 ROOT_URLCONF = 'TicketSystem.urls'
 
 # Template configuration
 # https://docs.djangoproject.com/en/6.1/topics/templates/
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+		{
+				'BACKEND'  : 'django.template.backends.django.DjangoTemplates',
+				'DIRS'     : [],
+				'APP_DIRS' : True,
+				'OPTIONS'  : {
+						'context_processors' : [
+								'django.template.context_processors.debug',
+								'django.template.context_processors.request',
+								'django.contrib.auth.context_processors.auth',
+								'django.contrib.messages.context_processors.messages',
+								],
+						},
+				},
+		]
 
 WSGI_APPLICATION = 'TicketSystem.wsgi.application'
 
 # Storages
 #  
 STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-    }
+		"default"     : {
+				"BACKEND" : "django.core.files.storage.FileSystemStorage",
+				},
+		"staticfiles" : {
+				"BACKEND" : "whitenoise.storage.CompressedManifestStaticFilesStorage",
+				},
+		}
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+		'default' : {
+				'ENGINE' : 'django.db.backends.sqlite3',
+				'NAME'   : BASE_DIR / 'db.sqlite3',
+				},
+		}
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+		{
+				'NAME' : 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+				},
+		{
+				'NAME' : 'django.contrib.auth.password_validation.MinimumLengthValidator',
+				},
+		{
+				'NAME' : 'django.contrib.auth.password_validation.CommonPasswordValidator',
+				},
+		{
+				'NAME' : 'django.contrib.auth.password_validation.NumericPasswordValidator',
+				},
+		]
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
@@ -135,8 +135,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_ROOT = BASE_DIR / 'app' / 'static' / 'app'
-STATIC_URL = 'static/' 
+STATIC_URL = 'static/'
 MEDIA_ROOT = STATIC_ROOT / 'media'
+LOCAL_FILE_DIR = BASE_DIR / 'local_files'
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'helpdesk:index'
@@ -154,61 +155,109 @@ DATA_UPLOAD_MAX_NUMBER_FILES = 5
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
 MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+		'default' : {
+				'BACKEND' : 'django.core.mail.backends.console.EmailBackend',
+				},
+		}
 # https://unfoldadmin.com/
-
+# Icons are in https://fonts.google.com/icons
 UNFOLD = {
-    'THEME': 'light',
-    'SITE_TITLE': 'SCI Helpdesk',
-    'SITE_HEADER': 'Helpdesk administration',
-    'SITE_URL': reverse_lazy('helpdesk:index'),
-    'SITE_LOGO': lambda request: static('helpdesk/sci-logo.svg'),
-    'STYLES': [lambda request: static('helpdesk/admin.css')],
-    'SCRIPTS': [lambda request: static('helpdesk/admin-theme.js')],
-    'COLORS': {'primary': {
-        '50': '#fff1f0', '100': '#ffe1df', '200': '#ffc8c4', '300': '#ffa19a', '400': '#f87167',
-        '500': '#ed463b', '600': '#cf2924', '700': '#ad201c', '800': '#8f201d', '900': '#77221f', '950': '#410d0b',
-    }},
-    'SIDEBAR': {'show_all_applications': False, 'navigation': [
-        {'title': 'Helpdesk administration', 'items': [
-            {'title': 'Tickets',
-             'icon': 'confirmation_number',
-             'link': reverse_lazy('admin:helpdesk_ticket_changelist'),
-             'active': lambda request: request.path.startswith('/admin/helpdesk/ticket/') and request.path != str(reverse_lazy('admin:helpdesk_ticket_reports')),
-             'permission': lambda request: request.user.has_perm('helpdesk.view_ticket')},
+		'THEME'       : 'light',
+		'SITE_TITLE'  : 'SCI Helpdesk',
+		'SITE_HEADER' : 'Helpdesk administration',
+		'SITE_URL'    : reverse_lazy('helpdesk:index'),
+		'SITE_LOGO'   : lambda request : static('helpdesk/sci-logo.svg'),
+		'STYLES'      : [lambda request : static('helpdesk/admin.css')],
+		'SCRIPTS'     : [lambda request : static('helpdesk/admin-theme.js')],
+		'COLORS'      : {
+				'primary' : {
+						'50'  : '#fff1f0', '100' : '#ffe1df', '200' : '#ffc8c4', '300' : '#ffa19a', '400' : '#f87167',
+						'500' : '#ed463b', '600' : '#cf2924', '700' : '#ad201c', '800' : '#8f201d', '900' : '#77221f',
+						'950' : '#410d0b',
+						},
+				},
+		'SIDEBAR'     : {
+				'show_all_applications' : False, 'navigation' : [
+						{
+								'title' : 'Helpdesk administration', 'items' : [
+								{
+										'title'      : 'Tickets',
+										'icon'       : 'confirmation_number',
+										'link'       : reverse_lazy('admin:helpdesk_ticket_changelist'),
+										'active'     : lambda request : request.path.startswith(
+												'/admin/helpdesk/ticket/',
+												) and request.path != str(
+											reverse_lazy('admin:helpdesk_ticket_reports'),
+												),
+										'permission' : lambda request : request.user.has_perm('helpdesk.view_ticket'),
+										},
 
-            {'title': 'Categories',
-             'icon': 'folder',
-             'link': reverse_lazy('admin:helpdesk_category_changelist'),
-             'permission': lambda request: request.user.has_perm('helpdesk.view_category')},
+								{
+										'title'      : 'Categories',
+										'icon'       : 'folder',
+										'link'       : reverse_lazy('admin:helpdesk_category_changelist'),
+										'permission' : lambda request : request.user.has_perm(
+												'helpdesk.view_category'),
+										},
 
-            {'title': 'Ticket types',
-             'icon': 'description',
-             'link': reverse_lazy('admin:helpdesk_tickettype_changelist'),
-             'permission': lambda request: request.user.has_perm('helpdesk.view_tickettype')},
+								{
+										'title'      : 'Ticket types',
+										'icon'       : 'description',
+										'link'       : reverse_lazy('admin:helpdesk_tickettype_changelist'),
+										'permission' : lambda request : request.user.has_perm(
+												'helpdesk.view_tickettype',
+												),
+										},
+								{
+										"title"      : "Approved Software",
+										'icon'       : 'code',
+										"link"       : reverse_lazy("admin:helpdesk_approvedsoftware_changelist"),
+										"permission" : lambda request : request.user.has_perm('auth.view_models'),
+										},
+{
+										"title"      : "Hardware List",
+										'icon'       : 'computer',
+										"link"       : reverse_lazy("admin:helpdesk_currenthardware_changelist"),
+										"permission" : lambda request : request.user.has_perm('auth.view_models'),
+										},
 
-            {'title': 'Reports',
-             'icon': 'bar_chart',
-             'link': reverse_lazy('admin:helpdesk_ticket_reports'),
-             'permission': lambda request: request.user.has_perms(['helpdesk.view_ticket', 'helpdesk.view_reports'])},
-        ]},
-        {'title': 'Accounts', 'items': [
-            {'title': 'Users',
-             'icon': 'person',
-             'link': reverse_lazy('admin:auth_user_changelist'),
-             'permission': lambda request: request.user.has_perm('auth.view_user')},
+								{
+										'title'      : 'Reports',
+										'icon'       : 'bar_chart',
+										'link'       : reverse_lazy('admin:helpdesk_ticket_reports'),
+										'permission' : lambda request : request.user.has_perms(
+												['helpdesk.view_ticket', 'helpdesk.view_reports'],
+												),
+										},
+								],
+								},
+						{
+								'title' : 'Accounts', 'items' : [
+								{
+										'title'      : 'Users',
+										'icon'       : 'person',
+										'link'       : reverse_lazy('admin:auth_user_changelist'),
+										'permission' : lambda request : request.user.has_perm('auth.view_user'),
+										},
 
-            {'title': 'Groups',
-             'icon': 'group',
-             'link': reverse_lazy('admin:auth_group_changelist'),
-             'permission': lambda request: request.user.has_perm('auth.view_group')},
-        ]},
-        {'items': [{'title': 'Open employee portal',
-                    'icon': 'open_in_new',
-                    'link': reverse_lazy('helpdesk:index'),
-                    'active': False}]},
-    ]},
+								{
+										'title'      : 'Groups',
+										'icon'       : 'group',
+										'link'       : reverse_lazy('admin:auth_group_changelist'),
+										'permission' : lambda request : request.user.has_perm('auth.view_group'),
+										},
+								],
+								},
+						{
+								'items' : [
+										{
+												'title'  : 'Open employee portal',
+												'icon'   : 'open_in_new',
+												'link'   : reverse_lazy('helpdesk:index'),
+												'active' : False,
+												},
+										],
+								},
+						],
+				},
 }

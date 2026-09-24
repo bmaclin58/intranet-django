@@ -64,10 +64,16 @@ class TicketField(models.Model):
         return [line.strip() for line in self.choices.splitlines() if line.strip()]
 
     def clean(self):
+        from helpdesk.forms.tickets import DYNAMIC_FIELD_NAMES
+
         super().clean()
         if not self.label.strip():
             raise ValidationError({'label': 'Enter a field label.'})
-        if self.field_type in (self.Kind.DROPDOWN, self.Kind.MULTIPLE):
+
+        if self.field_type in (self.Kind.DROPDOWN, self.Kind.MULTIPLE) :
+            # Bypass validation for the dynamic table field since 'choices' text field is intentionally blank
+            if self.label in DYNAMIC_FIELD_NAMES :
+                return
             options = self.options
             if not options or len(options) > 100 or len(options) != len(set(options)) or any(len(x) > 200 for x in options):
                 raise ValidationError({'choices': 'Enter 1–100 unique options, up to 200 characters each.'})
@@ -82,11 +88,11 @@ def Software_file_path():
 class ApprovedSoftware(models.Model) :
     software_Name = models.CharField(max_length = 150)
     download_site = models.URLField(name = 'Download Website', blank = True, null = True)
-    file_location = models.FilePathField(path = Software_file_path,
-                                         allow_folders = True,
-                                         name = 'File / Folder Path',
-                                         blank = True, null = True)
+    file_location = models.CharField(max_length = 200 , blank = True, null = True)
 
     class Meta:
         ordering = ['software_Name']
         verbose_name_plural = 'Approved Software Files'
+
+class CurrentHardware(models.Model) :
+    hardware_Name = models.CharField(max_length = 150)

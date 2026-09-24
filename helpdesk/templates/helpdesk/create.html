@@ -1,27 +1,41 @@
 {% extends 'helpdesk/base.html' %}
 {% block title %}{% if preview %}Preview{% else %}New ticket{% endif %}{% endblock %}
 {% block content %}
-    <div class="request-layout">
+	<div class = "request-layout">
         <section>
             <h1>{% if preview %}Preview: {{ kind.name }}{% else %}New ticket{% endif %}</h1>
-            <p class="lead">{% if preview %}Saved form preview. No ticket will be created.{% else %}Tell us what you
-                need. IT will follow up here.{% endif %}</p>
-            {% if preview %}
-                <p><a href="{% url 'admin:helpdesk_tickettype_change' kind.pk %}">Back to ticket type configuration</a>
+            <p class = "lead">{% if preview %}Saved form preview. No ticket will be created.{% else %}Tell us what you
+                                              need. IT will follow up here.{% endif %}</p>
+	        {% if preview %}
+		        <p><a href = "{% url 'admin:helpdesk_tickettype_change' kind.pk %}">Back to ticket type configuration</a>
                 </p>{% else %}
-                <ol class="steps" aria-label="Ticket submission steps">
+		        <ol class = "steps" aria-label = "Ticket submission steps">
                     <li><span>1</span>Choose a request</li>
-                    <li class="current" aria-current="step"><span>2</span>Ticket details</li>
+                    <li class = "current" aria-current = "step"><span>2</span>Ticket details</li>
                 </ol>{% endif %}
-            <div class="request-context">
+	        <div class = "request-context">
                 <div><span>Category</span><strong>{{ kind.category }}</strong></div>
                 <div><span>Ticket type</span><strong>{{ kind.name }}</strong></div>{% if not preview %}
-                <a href="{% url 'helpdesk:choose' %}">Change request</a>{% endif %}</div>
-            {{ form }}
-            {% if preview %}
-                <p class="muted">Preview only. Save changes in administration before previewing again.</p>{% endif %}
+
+		        <a href = "{% url 'helpdesk:choose' %}">Change request</a>{% endif %}</div>
+
+	        {% for ticket_name, ticket_url in knowledge_base_tickets %}
+		        {% if kind.name == ticket_name %}
+			        <div class="request-context" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+            <div class="align-center">
+                <a href = "{{ ticket_url }}">
+                    <strong>READ THIS BEFORE SUBMITTING A TICKET: {{ kind.name }}</strong>
+                </a>
+            </div>
+        </div>
+		        {% endif %}
+	        {% endfor %}
+
+	        {{ form }}
+	        {% if preview %}
+		        <p class = "muted">Preview only. Save changes in administration before previewing again.</p>{% endif %}
         </section>
-        <aside class="request-guide"><h2>What happens next</h2>
+        <aside class = "request-guide"><h2>What happens next</h2>
             <ol>
                 <li>Your ticket is sent to IT.</li>
                 <li>Track progress in My tickets.</li>

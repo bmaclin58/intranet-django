@@ -10,7 +10,7 @@ from unfold.admin import ModelAdmin, TabularInline
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 
 from .models import Category, Ticket, TicketAttachment, TicketComment, TicketField, TicketType
-from .models.definitions import ApprovedSoftware
+from .models.definitions import ApprovedSoftware, CurrentHardware
 from .permissions import eligible_assignees
 from . import admin_views
 
@@ -27,6 +27,11 @@ class SoftwareApproval_Admin(ModelAdmin):
     list_filter = ['software_Name']
     search_fields = ['software_Name']
 
+@admin.register(CurrentHardware)
+class Hardware_Admin(ModelAdmin):
+    list_display = ['hardware_Name']
+    list_filter = ['hardware_Name']
+    search_fields = ['hardware_Name']
 
 class TicketFieldInline(TabularInline):
     model = TicketField
