@@ -48,7 +48,8 @@ INSTALLED_APPS = [
 		'django.contrib.messages',
 		'django.contrib.staticfiles',
 		'helpdesk.apps.HelpdeskConfig',
-		]
+	"CalCloud.apps.CalcloudConfig"
+]
 
 MIDDLEWARE = [
 		'iommi.live_edit.Middleware',

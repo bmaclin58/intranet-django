@@ -1,0 +1,13 @@
+{% extends 'CalCloud/base.html' %}
+{% block content %}
+<div class="page-heading"><h1><svg class="icon" aria-hidden="true"><use href="#icon-{{ icon }}"/></svg>{{ title }}</h1>{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}</div>
+{% if page == 'assets' %}{% include 'CalCloud/health.html' %}{% endif %}
+{% if page == 'changelog' %}<p class="page-description">View an at-a-glance summary of the changes made to your assets. Sort and filter the data to find the changes you need, then export your results.</p>{% endif %}
+<div class="export-row"><button class="export-button" type="button" data-export><svg class="icon" aria-hidden="true"><use href="#icon-export"/></svg>{% if page == 'changelog' %}Export{% else %}Export Report{% endif %}</button></div>
+{% if filters %}{% include 'CalCloud/filters.html' %}{% endif %}
+<section class="grid-section" aria-labelledby="grid-title"><h2 class="section-tab" id="grid-title">{{ grid_title }}</h2>
+  {% if page == 'changelog' %}<div class="grid-toolbar"><label for="quick-search">Search changes</label><input type="search" id="quick-search" placeholder="Barcode, field or value…"><button class="button button-dark" type="button" id="reset-grid">Reset</button></div>{% endif %}
+  <div id="data-grid" class="data-grid" aria-label="{{ grid_title }}"></div>
+</section>
+<div class="export-row bottom-export"><button class="export-button" type="button" data-export><svg class="icon" aria-hidden="true"><use href="#icon-export"/></svg>Export Report</button></div>
+{% endblock %}

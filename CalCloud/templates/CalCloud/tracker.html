@@ -1,0 +1,6 @@
+{% extends 'CalCloud/base.html' %}
+{% block content %}
+<div class="page-heading"><h1><svg class="icon" aria-hidden="true"><use href="#icon-tracker"/></svg>Asset Tracking Records</h1></div>
+<section class="tracker-intro"><h2>What is Asset Tracker?</h2><p>The Asset Tracker allows you to review records that detail the usage history of your assets. Records document the date, location, instrument information, and more, giving you greater insight into the life of your instruments.</p></section>
+<a class="tracker-link" href="{% url 'calcloud:tracking_list' %}"><svg class="icon" aria-hidden="true"><use href="#icon-list"/></svg><h2>Find &amp; View Records</h2><svg class="icon forward-chevron" aria-hidden="true"><use href="#icon-chevron"/></svg></a>
+{% endblock %}

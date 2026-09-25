@@ -1,0 +1,4 @@
+<section class="asset-health" aria-labelledby="health-title">
+  <div class="health-numbers"><h2 id="health-title">Asset Health Report</h2><ul>{% for item in health %}<li><span class="health-count">{{ item.count }}</span><span class="health-label"><i style="--legend-color:{{ item.color }}"></i>{{ item.label }}</span></li>{% endfor %}</ul></div>
+  <div class="chart-container health-chart"><canvas id="health-chart" role="img" aria-label="Asset health: 32 current, 14 due, 278 overdue, 22 in process"></canvas></div>
+</section>

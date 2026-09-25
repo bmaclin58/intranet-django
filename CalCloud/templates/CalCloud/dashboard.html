@@ -1,0 +1,11 @@
+{% extends 'CalCloud/base.html' %}
+{% block content %}
+<h1 class="sr-only">Dashboard</h1>
+<div class="summary-cards">{% for stat in summary %}<a class="summary-card{% if stat.label == 'Overdue' %} overdue-card{% endif %}" href="{% url 'calcloud:assets' %}?{{ stat.query }}"><span class="summary-number">{{ stat.count }}</span><span class="summary-label"><svg class="icon" aria-hidden="true"><use href="#icon-{{ stat.icon }}"/></svg>{{ stat.label }}</span></a>{% endfor %}</div>
+<div class="dashboard-panels">
+  <section class="panel"><h2>Asset Health</h2><div class="chart-container health-chart"><canvas id="health-chart" role="img" aria-label="Asset health: 32 current, 14 due, 278 overdue, 22 in process"></canvas></div><ul class="chart-legend">{% for item in health %}<li><span style="--legend-color:{{ item.color }}"></span>{{ item.label }}</li>{% endfor %}</ul></section>
+  <section class="panel"><h2>Historical Services Complete</h2><div class="chart-container"><canvas id="services-chart" role="img" aria-label="Synthetic service history over the past twelve demo months"></canvas></div></section>
+  <section class="panel"><h2>Out of Tolerance</h2><div class="chart-container"><canvas id="tolerance-chart" role="img" aria-label="Synthetic tolerance outcomes over the past twelve demo months"></canvas></div></section>
+  <section class="panel recall-panel"><div class="panel-heading"><h2><svg class="icon" aria-hidden="true"><use href="#icon-bell"/></svg> Recalls</h2><a href="{% url 'calcloud:recalls' %}">See All Recalls <span aria-hidden="true">»</span></a></div><p class="table-caption">Assets in This Table Are Due or Overdue for Service</p><div id="data-grid" class="data-grid compact-grid" aria-label="Assets due or overdue"></div></section>
+</div>
+{% endblock %}

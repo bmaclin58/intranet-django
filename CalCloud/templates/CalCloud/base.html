@@ -1,0 +1,48 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} - CalCloud Demo</title>
+  <link rel="icon" href="{% static 'CalCloud/logo.png' %}">
+  <link rel="stylesheet" href="{% static 'CalCloud/portal.css' %}">
+</head>
+<body data-page="{{ page }}">
+{% include 'CalCloud/icons.html' %}
+<a class="skip-link" href="#main">Skip to content</a>
+<header>
+  <div class="top-links"><a class="portal-link" href="{% url 'calcloud:dashboard' %}">Portal</a><span aria-hidden="true"></span><a href="https://calcloud.standardcal.com/contact" target="_blank" rel="noopener noreferrer">Contact</a></div>
+  <div class="brand-row">
+    <a href="{% url 'calcloud:dashboard' %}" aria-label="CalCloud dashboard"><img class="brand-logo" src="{% static 'CalCloud/logo.png' %}" alt="CalCloud" width="145" height="88"></a>
+    <details class="user-menu"><summary>Hi Brian Maclin <svg class="icon"><use href="#icon-chevron"/></svg></summary>
+      <nav aria-label="User navigation">{% for name, label, icon in navigation %}<a href="{% url 'calcloud:'|add:name %}">{{ label }}</a>{% endfor %}</nav>
+    </details>
+  </div>
+</header>
+<div class="company-bar"><details class="company-menu"><summary>Example Company <svg class="icon"><use href="#icon-chevron"/></svg></summary><div class="company-options">Example Company <small>Local demo company</small></div></details></div>
+<div class="portal-layout">
+  <aside class="sidebar">
+    <button type="button" class="mobile-menu" aria-expanded="false" aria-controls="side-nav"><svg class="icon"><use href="#icon-menu"/></svg> Navigation</button>
+    <nav id="side-nav" aria-label="Portal navigation">
+      {% for name, label, icon in navigation %}<a href="{% url 'calcloud:'|add:name %}"{% if active_nav == name %} class="selected" aria-current="page"{% endif %}><svg class="icon" aria-hidden="true"><use href="#icon-{{ icon }}"/></svg><span>{{ label }}</span></a>{% endfor %}
+      <a href="https://calcloud.standardcal.com/Shop-For-Products" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#icon-shop"/></svg><span>Shop for Products</span></a>
+    </nav>
+  </aside>
+  <main id="main" class="main-content" tabindex="-1">
+    {% block content %}{% endblock %}
+    <footer class="demo-note">Local demo · Example records and generated data · No connection to live CalCloud</footer>
+  </main>
+</div>
+<dialog id="asset-dialog" aria-labelledby="asset-dialog-title">
+  <div class="dialog-heading"><h2 id="asset-dialog-title"><svg class="icon" aria-hidden="true"><use href="#icon-assets"/></svg> Asset Details</h2><button type="button" class="icon-button" data-close-dialog aria-label="Close asset details"><svg class="icon"><use href="#icon-close"/></svg></button></div>
+  <div class="dialog-content"><p class="detail-identity" id="asset-identity"></p><dl class="detail-fields" id="asset-fields"></dl><h3>Custom Fields</h3><dl class="detail-fields" id="asset-custom-fields"></dl><p class="muted">Demo record · Certificates and live changes are unavailable.</p></div>
+  <div class="dialog-footer"><button type="button" class="button button-primary" data-close-dialog>Close</button></div>
+</dialog>
+<p id="live-message" class="sr-only" role="status"></p>
+{{ payload|json_script:'portal-data' }}
+{% if payload.rows != None %}<script src="{% static 'CalCloud/vendor/ag-grid-community-36.2.0.min.js' %}" defer></script>{% endif %}
+{% if page == 'dashboard' or page == 'assets' %}<script src="{% static 'unfold/js/chart/chart.js' %}" defer></script>{% endif %}
+<script src="{% static 'CalCloud/portal.js' %}" defer></script>
+</body>
+</html>

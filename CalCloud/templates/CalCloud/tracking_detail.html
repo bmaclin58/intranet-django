@@ -1,0 +1,8 @@
+{% extends 'CalCloud/base.html' %}
+{% block content %}
+<a class="back-link" href="{% url 'calcloud:tracking_list' %}">← Back to tracking records</a>
+<div class="page-heading"><h1><svg class="icon" aria-hidden="true"><use href="#icon-tracker"/></svg>{{ title }}</h1></div>
+<section class="panel tracking-record"><h2>Asset Tracking Record</h2><dl class="detail-fields">{% for label, value in details %}<div><dt>{{ label }}</dt><dd>{{ value|default:'N/A' }}</dd></div>{% endfor %}</dl><p class="muted">{{ record.notes }}</p></section>
+<div class="export-row"><button class="export-button" type="button" data-export><svg class="icon" aria-hidden="true"><use href="#icon-export"/></svg>Export Report</button></div>
+<section class="grid-section"><h2 class="section-tab">Instruments Used</h2><div id="data-grid" class="data-grid" aria-label="Instruments used in tracking record"></div></section>
+{% endblock %}

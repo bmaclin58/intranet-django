@@ -1,0 +1,21 @@
+<section class="filter-section" aria-labelledby="filter-heading">
+  <h2 class="section-tab" id="filter-heading">{{ filter_heading }}</h2>
+  <form id="filter-form" class="filter-panel">
+    <h3>{{ filter_description }}</h3>
+    <div class="filter-fields">
+    {% for field in filters %}
+      <div class="filter-field{% if field.kind == 'date' %} date-field{% endif %}{% if field.advanced %} advanced-field{% endif %}"{% if field.advanced %} hidden{% endif %}>
+        {% if field.kind == 'date' %}
+        <span class="field-label" id="label-{{ field.name }}">{{ field.label }}</span><div class="date-range" role="group" aria-labelledby="label-{{ field.name }}"><input type="date" name="{{ field.name }}_min" aria-label="{{ field.label }} from"><span aria-hidden="true">–</span><input type="date" name="{{ field.name }}_max" aria-label="{{ field.label }} to"></div>
+        {% else %}
+        <label for="filter-{{ field.name }}">{{ field.label }}</label>
+        {% if field.kind == 'select' %}<select name="{{ field.name }}" id="filter-{{ field.name }}">{% for value, label in field.options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select>
+        {% else %}<input type="text" name="{{ field.name }}" id="filter-{{ field.name }}" placeholder="{{ field.label }}" autocomplete="off">{% endif %}
+        {% endif %}
+      </div>
+    {% endfor %}
+    </div>
+    <p id="filter-error" class="form-error" role="alert" hidden></p>
+    <div class="filter-actions"><button class="button button-dark" type="reset">Reset Filters</button><button class="button button-dark" type="button" id="additional-filters" aria-expanded="false">Additional Filters <svg class="icon"><use href="#icon-chevron"/></svg></button><button class="button button-primary" type="submit">Apply Filters</button></div>
+  </form>
+</section>

@@ -14,15 +14,13 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/venvTicketSystem" />
     </content>
-    <orderEntry type="jdk" jdkName="~\source\repos\TicketSystem\venvTicketSystem" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="C:\Programing Projects\djangoIntranet\.venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="PLAIN" />
-  </component>
-  <component name="TemplatesService">
-    <option name="TEMPLATE_CONFIGURATION" value="Django" />
   </component>
 </module>

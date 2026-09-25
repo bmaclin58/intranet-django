@@ -1,0 +1,25 @@
+{% extends 'CalCloud/base.html' %}
+{% block content %}
+<div class="page-heading"><h1><svg class="icon" aria-hidden="true"><use href="#icon-support"/></svg>Help and Support</h1></div>
+<div class="export-row"><a class="export-button" href="https://assets.codepen.io/1083508/CCv2-1_USER_GUIDE_v1.pdf" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#icon-list"/></svg>Download CalCloud 2.0 User Guide</a></div>
+<p class="help-intro">The User Guide videos explain how to take full advantage of CalCloud's useful features. You can also read through frequently asked questions on the FAQs tab.</p>
+<div class="help-tabs" role="tablist" aria-label="Help topics"><button type="button" id="videos-tab" role="tab" aria-selected="true" aria-controls="videos">Videos</button><button type="button" id="faqs-tab" role="tab" aria-selected="false" aria-controls="faqs" tabindex="-1">FAQs</button></div>
+<section id="videos" role="tabpanel" aria-labelledby="videos-tab"><h2>Help Videos</h2><div class="video-guides">
+  <article><a class="video-link" href="https://calcloud.standardcal.com/Portal/Help-And-Support#videos" target="_blank" rel="noopener noreferrer" aria-label="Open Dashboard video guide on CalCloud"><svg class="icon"><use href="#icon-play"/></svg><span>Watch on CalCloud</span></a><h3>Dashboard</h3><p>High-level data to quickly assess the status of your CalCloud assets.</p></article>
+  <article><a class="video-link" href="https://calcloud.standardcal.com/Portal/Help-And-Support#videos" target="_blank" rel="noopener noreferrer" aria-label="Open Assets video guide on CalCloud"><svg class="icon"><use href="#icon-play"/></svg><span>Watch on CalCloud</span></a><h3>Assets</h3><p>Search your assets, view instrument details, and export a filtered report.</p></article>
+  <article><a class="video-link" href="https://calcloud.standardcal.com/Portal/Help-And-Support#videos" target="_blank" rel="noopener noreferrer" aria-label="Open Request for Service video guide on CalCloud"><svg class="icon"><use href="#icon-play"/></svg><span>Watch on CalCloud</span></a><h3>Request for Service</h3><p>Learn how service requests work in the original CalCloud portal.</p></article>
+  <article><a class="video-link" href="https://calcloud.standardcal.com/Portal/Help-And-Support#videos" target="_blank" rel="noopener noreferrer" aria-label="Open Recalls video guide on CalCloud"><svg class="icon"><use href="#icon-play"/></svg><span>Watch on CalCloud</span></a><h3>Recalls</h3><p>Find instruments due or overdue for service and export a Recall Report.</p></article>
+  <article><a class="video-link" href="https://calcloud.standardcal.com/Portal/Help-And-Support#videos" target="_blank" rel="noopener noreferrer" aria-label="Open ChangeLog video guide on CalCloud"><svg class="icon"><use href="#icon-play"/></svg><span>Watch on CalCloud</span></a><h3>ChangeLog</h3><p>Review changes to asset information and download your change history.</p></article>
+</div></section>
+<section id="faqs" role="tabpanel" aria-labelledby="faqs-tab" hidden><h2>FAQs</h2><div class="faq-list">
+  <article><h3>Where can I find pre-filtered asset reports?</h3><p>The four cards at the top of the Dashboard open the Assets page filtered by Active, Inactive, Due, or Overdue.</p></article>
+  <article><h3>Where can I view my service history?</h3><p>The Historical Services Complete chart on the Dashboard shows In Lab, On Site, and Out Of Lab services over twelve months. This demo uses synthetic chart history.</p></article>
+  <article><h3>Where can I view my assets that are out of tolerance?</h3><p>The Dashboard's Out of Tolerance chart compares instruments received in tolerance, adjusted into tolerance, and returned out of tolerance.</p></article>
+  <article><h3>Where can I view all of my assets and export asset reports?</h3><p>Open Assets, enter your filters, and select Apply Filters. Export Report downloads every matching row across all pages, in the current sort order.</p></article>
+  <article><h3>Are there more filter options?</h3><p>Select Additional Filters to search Brand, Model Number, Serial #, Location, Sub-Location, Operating Range, and Condition.</p></article>
+  <article><h3>Can I change asset details or request certificates?</h3><p>This local demo is read-only. Asset details are available through View. Editing, certificates, and service submissions are available only in the original portal.</p></article>
+  <article><h3>Where can I view changes to my asset details?</h3><p>The ChangeLog page provides searchable example history. Use Reset to clear the grid settings or Export to download matching changes.</p></article>
+  <article><h3>How can I contact a CalCloud representative?</h3><p>Visit the <a href="https://calcloud.standardcal.com/contact" target="_blank" rel="noopener noreferrer">CalCloud contact page</a> for assistance.</p></article>
+</div></section>
+<p class="support-footer">For questions about the original service, visit <a href="https://standardcal.com/" target="_blank" rel="noopener noreferrer">Standard Calibrations</a>. Help resources open on the original website.</p>
+{% endblock %}
